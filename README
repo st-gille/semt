@@ -20,10 +20,10 @@ to create the documentation with doxygen.
 
 There are several example programs:
 
-    * examples/semt_examples.cpp
+    * semt_examples.cpp
             These are used in the documentation.
 
-    * examples/semt_speed.cpp
+    * semt_speed.cpp
             A test run on a mapping R^10 -> R^10.
 
     * semt_jacobian

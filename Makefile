@@ -11,7 +11,7 @@ BUILD_DIR := ./Debug
 GCOV_DIR := ./gcov
 DOXY_DIR := ./doc
 
-DIRS := semt/ examples/ src/ src/test/ loki/
+DIRS := semt/ examples/ loki/
 SEMT_FILES = $(foreach dir,$(DIRS),$(wildcard $(dir)/*))
 VPATH := ${DIRS}
 
@@ -63,7 +63,6 @@ endif
 # objects
 #
 SEMTOBJS := ${BUILD_DIR}/VectorExpr.o
-test_deriv_OBJS := ${SEMTOBJS}
 semt_check_OBJS := ${SEMTOBJS}
 semt_speed_OBJS := ${BUILD_DIR}/semt_speed_func.o ${SEMTOBJS}
 semt_jacobian_OBJS := ${BUILD_DIR}/semt_func_impl.o ${SEMTOBJS}
