@@ -19,19 +19,18 @@ Run
 to create the documentation with doxygen.
 
 There are several example programs:
-<dl>
-    <dt>examples/semt_examples.cpp</dt>
-    <dt>These are used in the documentation.</dd>
 
-    <dt>examples/semt_speed.cpp</dt>
-    <dd>A test run on a mapping R^10 -> R^10.</dd>
+    * examples/semt_examples.cpp
+            These are used in the documentation.
 
-    <dt>semt_jacobian</dt>
-    <dd>Implementation of Newton's method.</dd>
+    * examples/semt_speed.cpp
+            A test run on a mapping R^10 -> R^10.
 
-    <dt>semt_check</dt>
-    <dd>Some crude tests.</dd>
-</dl>
+    * semt_jacobian
+            Implementation of Newton's method.
+
+    * semt_check
+            Some crude tests.
 
 You can run
     make [release | gprof | gcov] <binary>
