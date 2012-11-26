@@ -35,7 +35,7 @@ my_semt_func::my_semt_func()
 {
     DifferentiableVectorExpr<10, 1>DVE;
     DVE = g1, g2, g3, g4, g5, g6, g7, g8, g9, g10;
-    bunch_of_functions.push_back(DVE.get_derivative(0));
+    bunch_of_functions.push_back(DVE.get_function());
     bunch_of_functions.push_back(DVE.get_derivative(1));
 }
 

@@ -34,7 +34,7 @@ my_semt_vector::my_semt_vector()
 {
     DifferentiableVectorExpr<6, 2> Fn;
     Fn = f1, f2, f3, f4, f5;
-    functions_.push_back(Fn.get_derivative(0));
+    functions_.push_back(Fn.get_function());
     functions_.push_back(Fn.get_derivative(1));
     functions_.push_back(Fn.get_derivative(2));
 }
@@ -50,7 +50,7 @@ auto f5 = pow(sin(x0 / x1), f4);
 my_semt_vector::my_semt_vector()
 {
     DifferentiableVectorExpr<3, 2> Fn = f1, f2, f3, f4, f5;
-    functions_.push_back(Fn.get_derivative(0));
+    functions_.push_back(Fn.get_function());
     functions_.push_back(Fn.get_derivative(1));
     functions_.push_back(Fn.get_derivative(2));
 }

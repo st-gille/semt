@@ -203,6 +203,31 @@ class DifferentiableVectorExpr
         return _data[i];
     }
 
+    const VectorExpr& get_function()
+    {
+        return _data[0];
+    }
+
+    /*!
+     * Calculate all the expressions for a given vector of unknowns.
+     * @param   x       Values for the unknown.
+     * @param   res     Vector to store results. Size must be at least size().
+     */
+    SEMT_INLINE void eval(CAR x, Array& res) const
+    {
+        _data[0].eval(x, res);
+    }
+
+    /*!
+     * Calculate all the expressions for a given vector of unknowns.
+     * @param   x       Values for the unknown.
+     * @return  Vector with the results.
+     */
+    SEMT_INLINE Array operator()(CAR x) const
+    {
+        return _data[0](x);
+    }
+
     /*!
      * Syntactic sugar, see the Example for usage.
      */

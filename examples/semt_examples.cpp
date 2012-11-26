@@ -159,7 +159,7 @@ int full_example()
             << dF.size() << " components.\n";
 
     // We can print and evaluate VectorExpr, just like the function itself:
-    cout << "F = " << DVE.get_derivative(0) << endl;
+    cout << "F = " << DVE.get_function() << endl;
     cout << "D[F] = \n" << dF << endl;
     cout << "D[F](" << x_0 << ") = \n\t" << dF(x_0) << endl;
 
