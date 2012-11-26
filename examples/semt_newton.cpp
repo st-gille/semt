@@ -18,19 +18,19 @@ using namespace SEMT;
 #define ERROR_LOG(msg) std::cerr << msg << std::endl;
 
 template<size_t dim>
-size_t searchpivotincoloumn(CAR A, size_t column)
+size_t search_pivot_column(CAR A, size_t column)
 {
     numeric_limits<SEMT_PRECISION>real_info;
     size_t j = 0;
     size_t p = column;
 
-    for (j = column + 1; j < dim; ++j) //spaltenpivotsuche
+    for (j = column + 1; j < dim; ++j)
     {
         if (fabs(A[p * dim + column]) < fabs(A[j * dim + column]))
             p = j;
     }
     if (fabs(A[p * dim + column]) < (real_info.epsilon()))
-        throw "singular matrix"; //Matrix ev. singulär, Fehler zurückgeben
+        throw "singular matrix";
     return p;
 }
 
@@ -46,20 +46,23 @@ int LRDecomp(Array& A, size_t * ipiv)
     {
         try
         {
-            p = searchpivotincoloumn<dim>(A, i);
+            p = search_pivot_column<dim>(A, i);
         }
         catch (char*)
         {
-            ERROR_LOG("\tMatrix numerisch singulär.");
+            ERROR_LOG("\tMatrix numerically singular.");
             return 1;
         }
-        if (p != i) //zeilentausch
+
+        //swap rows
+        if (p != i)
         {
             swap_ranges(A.begin() + (i * dim), A.begin() + (i * dim + dim), A.begin() + (p * dim));
             swap(ipiv[i], ipiv[p]);
         }
 
-        for (p = i + 1; p < dim; ++p) //spaltenelimination
+        // eliminate column
+        for (p = i + 1; p < dim; ++p)
         {
             A[p * dim + i] /= A[i * dim + i];
             for (j = i + 1; j < dim; ++j)
@@ -74,7 +77,7 @@ int LRDecomp(Array& A, size_t * ipiv)
 template<size_t dim>
 void LRSolve(CAR LR, CAR a, Array& y, const size_t * const ipiv)
 {
-    //Vorwärtssubstiution: solve Ly = a
+    //forward substitution: solve Ly = a
     for (size_t i = 0; i < dim; ++i)
     {
         y[i] = a[ipiv[i]];
@@ -83,7 +86,7 @@ void LRSolve(CAR LR, CAR a, Array& y, const size_t * const ipiv)
             y[i] -= (LR[i * dim + j] * y[j]);
         }
     }
-    //Rückwärtsubstitution: solve Ry = y
+    //backward substitution: solve Ry = y
     for (int i = dim - 1; i >= 0; --i)
     {
         for (int j = dim - 1; j > i; --j)
@@ -101,42 +104,41 @@ template<>inline long double norm2<0>(CAR x)
     return 0;
 }
 
-template<size_t vars, size_t values>
+template<size_t dim>
 int newtons_method(const VectorExpr& f, const VectorExpr& df, Array& x)
 {
-    assert(x.size() == vars);
-    assert(f.size() == values);
-    assert(df.size() == values * vars);
-    assert(vars == values);
+    assert(x.size() == dim);
+    assert(f.size() == dim);
+    assert(df.size() == dim * dim);
 
     double residual = 0.0;
 
     Array fv(f(x)); //initialize f at x
     Array dfv(df(x)); //initialize df at x
-    Array tmp(vars, 0);
+    Array tmp(dim, 0);
 
     cout << "Starting newton iteration with initial guess: " << x << endl;
-    size_t ipiv[vars];
+    size_t ipiv[dim];
     for (int it = 0;; ++it)
     {
         //solve Df * y = f
-        if (LRDecomp<vars>(dfv, ipiv))
+        if (LRDecomp<dim>(dfv, ipiv))
         {
             cerr << "encountered singular jacobian in iteration " << it << "\nfor x = " << x
                     << endl;
             return 1;
         }
-        LRSolve<vars>(dfv, fv, tmp, ipiv);
+        LRSolve<dim>(dfv, fv, tmp, ipiv);
         DEBUG_LOG( "iteration " << it << "\tincrement = " << tmp );
 
         //apply Newton-correction
-        for (size_t i = 0; i < vars; ++i)
+        for (size_t i = 0; i < dim; ++i)
             x[i] -= tmp[i];
         DEBUG_LOG( "\tcurrent 'solution' = " << x );
 
         //calculate new value
         f.eval(x, fv);
-        residual = norm2<vars>(fv);
+        residual = norm2<dim>(fv);
         DEBUG_LOG( "\tresidual^2 = " << residual );
 
         //exit loop if it overflows or residual is very small
@@ -154,7 +156,7 @@ int newtons_method(const VectorExpr& f, const VectorExpr& df, Array& x)
 
         df.eval(x, dfv);
         if (!(it % 5))
-            DEBUG_LOG( "Jacobian:\n "<< (matrix_str<10 , 10>(dfv)) << "\n");
+            DEBUG_LOG( "Jacobian:\n "<< (matrix_str<dim , dim>(dfv)) << "\n");
 
     }
     return 1;
@@ -178,8 +180,8 @@ int main()
     const VectorExpr& f = F.get_func(0);
     const VectorExpr& df = F.get_func(1);
     cout << "f = " << f << endl;
-    cout << "Df = " << (matrix_str<10, 10>(df)) << endl;
-    if (!newtons_method<10, 10>(f, df, x_0))
+    cout << "Df = " << (matrix_str<dim, dim>(df)) << endl;
+    if (!newtons_method<dim>(f, df, x_0))
     {
         cout << "Root of f found at \n  x  = " << x_0 << endl;
         cout << "f(x) = " << f(x_0) << endl;

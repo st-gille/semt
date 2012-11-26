@@ -42,11 +42,8 @@ There you will find an introductory example and the comprehensive API documentat
 There are several example programs:
 
 * `semt_examples` - These are used in the documentation.
-
 * `semt_speed` - A test run on a mapping R^10 -> R^10.
-
-* `semt_jacobian` - Implementation of Newton's method.
-
+* `semt_newton` - Implementation of Newton's method.
 * `semt_check` - Some crude tests.
 
 You can run

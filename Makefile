@@ -65,12 +65,12 @@ endif
 SEMTOBJS := ${BUILD_DIR}/VectorExpr.o
 semt_check_OBJS := ${SEMTOBJS}
 semt_speed_OBJS := ${BUILD_DIR}/semt_speed_func.o ${SEMTOBJS}
-semt_jacobian_OBJS := ${BUILD_DIR}/semt_func_impl.o ${SEMTOBJS}
+semt_newton_OBJS := ${BUILD_DIR}/semt_func_impl.o ${SEMTOBJS}
 semt_examples_OBJS := ${SEMTOBJS}
 
 BINARIES := semt_func_impl \
 		semt_check \
-		semt_jacobian \
+		semt_newton \
 		semt_speed_func \
 		semt_speed \
 		semt_examples
@@ -104,7 +104,7 @@ $(BUILD_DIR):
 		doc ${BINARIES}
 .PRECIOUS: ${BUILD_DIR}/%.o
 
-all build: semt_check semt_examples semt_speed semt_jacobian
+all build: semt_check semt_examples semt_speed semt_newton
 
 debug release:
 	@echo "Using $@ configuration"
