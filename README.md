@@ -5,7 +5,7 @@ The SEMT library provides an easy way to define arbitrary functions
 and obtain their derivatives via C++ expression templates.
 
 This is an extension of Zvi Guttermans original work
-accompanying his Ph.D. thesis
+accompanying his master thesis
 "Symbolic Pre-computation for Numerical Applications",
 see http://www.cs.technion.ac.il/~ssdl/thesis/finished/2004/ZviGutterman/.
 
