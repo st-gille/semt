@@ -178,7 +178,7 @@ struct BinarySimplifier
 /// f + 0 = f
 template<class LHS>
 struct BinarySimplifier<Plus, LHS, Integer<0>,
-        typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
+        typename disable_if_c<(isInt<LHS>::value || isComplexCond<LHS>::value)>::type>
 {
     typedef LHS Result;
 };
@@ -186,7 +186,7 @@ struct BinarySimplifier<Plus, LHS, Integer<0>,
 /// 0 + f = f
 template<class RHS>
 struct BinarySimplifier<Plus, Integer<0>, RHS,
-        typename disable_if_c<(isInt<RHS>::value || isCond<RHS>::value)>::type>
+        typename disable_if_c<(isInt<RHS>::value || isComplexCond<RHS>::value)>::type>
 {
     typedef RHS Result;
 };
@@ -194,7 +194,7 @@ struct BinarySimplifier<Plus, Integer<0>, RHS,
 /// f - f = 0
 template<class LHS>
 struct BinarySimplifier<Minus, LHS, LHS,
-        typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
+        typename disable_if_c<(isInt<LHS>::value || isComplexCond<LHS>::value)>::type>
 {
     typedef Integer<0> Result;
 };
@@ -202,7 +202,7 @@ struct BinarySimplifier<Minus, LHS, LHS,
 /// f - 0 = f
 template<class LHS>
 struct BinarySimplifier<Minus, LHS, Integer<0>,
-        typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
+        typename disable_if_c<(isInt<LHS>::value || isComplexCond<LHS>::value)>::type>
 {
     typedef LHS Result;
 };
@@ -218,7 +218,7 @@ struct BinarySimplifier<Minus, LHS, Integer<0>,
 /// f * 0 = 0
 template<class LHS>
 struct BinarySimplifier<Times, LHS, Integer<0>,
-        typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
+        typename disable_if_c<(isInt<LHS>::value)>::type>
 {
     typedef Integer<0> Result;
 };
@@ -226,7 +226,7 @@ struct BinarySimplifier<Times, LHS, Integer<0>,
 /// 0 * f = 0
 template<class LHS>
 struct BinarySimplifier<Times, Integer<0>, LHS,
-        typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
+        typename disable_if_c<(isInt<LHS>::value)>::type>
 {
     typedef Integer<0> Result;
 };
@@ -234,7 +234,7 @@ struct BinarySimplifier<Times, Integer<0>, LHS,
 /// f * 1 = f
 template<class LHS>
 struct BinarySimplifier<Times, LHS, Integer<1>,
-        typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
+        typename disable_if_c<(isInt<LHS>::value)>::type>
 {
     typedef LHS Result;
 };
@@ -242,7 +242,7 @@ struct BinarySimplifier<Times, LHS, Integer<1>,
 /// 1 * f = f
 template<class LHS>
 struct BinarySimplifier<Times, Integer<1>, LHS,
-        typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
+        typename disable_if_c<(isInt<LHS>::value)>::type>
 {
     typedef LHS Result;
 };
@@ -250,7 +250,7 @@ struct BinarySimplifier<Times, Integer<1>, LHS,
 /// f / f = 1 restr. f != 0
 template<class LHS>
 struct BinarySimplifier<Divide, LHS, LHS,
-        typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
+        typename disable_if_c<(isInt<LHS>::value)>::type>
 {
     typedef Defined_if<Integer<1>, NotZero, LHS> Result;
 };
@@ -258,7 +258,7 @@ struct BinarySimplifier<Divide, LHS, LHS,
 /// 0 / f = 0 restr. f != 0
 template<class LHS>
 struct BinarySimplifier<Divide, Integer<0>, LHS,
-        typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
+        typename disable_if_c<(isInt<LHS>::value)>::type>
 {
     typedef Defined_if<Integer<0>, NotZero, LHS> Result;
 };
@@ -273,6 +273,23 @@ struct BinarySimplifier<Divide, Integer<1>, LHS,
     typedef Power<LHS, -1> Result;
 };
 */
+
+/// f * 1 / f = 1
+template<class LHS>
+struct BinarySimplifier<Times, LHS, Divide<Integer<1>, LHS>,
+        typename disable_if_c<(isInt<LHS>::value)>::type>
+{
+    typedef Integer<1> Result;
+};
+
+
+/// (1 / f) * f = 1
+template<class LHS>
+struct BinarySimplifier<Times, Divide<Integer<1>, LHS>, LHS,
+        typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
+{
+    typedef Integer<1> Result;
+};
 /// @}
 
 /*!
@@ -365,7 +382,7 @@ struct RecursiveSimplifier<Defined_if<Ln_t<RHS>, NotZero, RHS>, void>
 /// {f restr} op g == {f op g restr}
 template<template<class, class > class Op, class LHS, class RHS, class cond, class cond_arg>
 struct BinarySimplifier<Op, Defined_if<LHS, cond, cond_arg>, RHS,
-        typename disable_if_c<isCond<RHS>::value>::type>
+        typename disable_if_c<isCond<RHS>::value || Loki::IsSameType<LHS, cond_arg>::value>::type>
 {
     typedef Defined_if<typename RecursiveSimplifier<Op<LHS, RHS> >::Result, cond, cond_arg> Result;
 };
@@ -373,33 +390,32 @@ struct BinarySimplifier<Op, Defined_if<LHS, cond, cond_arg>, RHS,
 /// f op {g restr} == {f op g restr}
 template<template<class, class > class Op, class LHS, class RHS, class cond, class cond_arg>
 struct BinarySimplifier<Op, LHS, Defined_if<RHS, cond, cond_arg>,
-        typename disable_if_c<isCond<LHS>::value>::type>
+        typename disable_if_c<isCond<LHS>::value || Loki::IsSameType<RHS, cond_arg>::value>::type>
 {
     typedef Defined_if<typename RecursiveSimplifier<Op<LHS, RHS> >::Result, cond, cond_arg> Result;
 };
 
-/*
  /// f + (g restr) = (f + g restr)
  template<class LHS, class cond, class cond_arg>
- struct BinarySimplifier<Plus, LHS, Defined_if<Integer<0>, cond, cond_arg>, typename disable_if<isCond<LHS>::value>::type >
+ struct BinarySimplifier<Plus, LHS, Defined_if<Integer<0>, cond, cond_arg>, typename disable_if<typename isCond<LHS>::value>::type >
  {  typedef Defined_if<LHS, cond, cond_arg> Result; };
 
  /// f - (g restr) = (f - g restr)
  template<class LHS, class cond, class cond_arg>
- struct BinarySimplifier<Minus, LHS, Defined_if<Integer<0>, cond, cond_arg>, typename disable_if<isCond<LHS>::value>::type >
+ struct BinarySimplifier<Minus, LHS, Defined_if<Integer<0>, cond, cond_arg>, typename disable_if<typename isCond<LHS>::value>::type >
  {  typedef Defined_if<LHS, cond, cond_arg> Result; };
 
  /// f * (g restr) = (f * g restr)
  template<class LHS, class cond, class cond_arg>
- struct BinarySimplifier<Plus, LHS, Defined_if<Integer<0>, cond, cond_arg>, typename disable_if<isCond<LHS>::value>::type >
+ struct BinarySimplifier<Times, LHS, Defined_if<Integer<0>, cond, cond_arg>, typename disable_if<typename isCond<LHS>::value>::type >
  {  typedef Defined_if<LHS, cond, cond_arg> Result; };
 
  /// f / (g restr) = (f / g restr)
  template<class LHS, class cond, class cond_arg>
- struct BinarySimplifier<Minus, LHS, Defined_if<Integer<0>, cond, cond_arg>, typename disable_if<isCond<LHS>::value>::type >
+ struct BinarySimplifier<Divide, LHS, Defined_if<Integer<0>, cond, cond_arg>, typename disable_if<typename isCond<LHS>::value>::type >
  {  typedef Defined_if<LHS, cond, cond_arg> Result; };
- */
 /*
+
  /// (0 restr) + f = (f restr)
  template<class RHS, class cond, class cond_arg>
  struct BinarySimplifier<Plus, Defined_if<Integer<0>, cond, cond_arg>, RHS, typename enable_if_c< !isZero<RHS>::value >::type >
@@ -424,7 +440,8 @@ struct BinarySimplifier<Op, LHS, Defined_if<RHS, cond, cond_arg>,
  template<class RHS, class cond, class cond_arg>
  struct BinarySimplifier<Times, Defined_if<Integer<1>, cond, cond_arg>, RHS, void>
  {  typedef Defined_if<RHS, cond, cond_arg> Result; };
- */
+*/
+
 /// @}
 /*!
  * @addtogroup simpl_int Integer related simplifications
@@ -551,31 +568,18 @@ struct BinarySimplifier<Divide, Rational<a, b>, Rational<i, j>, void>
 
 /// @}
 
-/*
  /// 0 ^ expr = 0
  /// @bug 0 ^e = 1 if expr = 0. Add a type similar to AbsDeriv_t, preferably a common solution.
  template<int expo> struct Power<Integer<0>,expo> { typedef Integer<0> simple_type; };
 
- /// 0 - expr = -1 * expr
- /// @todo Add unary minus.
- template<class expr> struct Minus<Integer<0>, expr >
- {  typedef Times<Integer<-1>, typename expr::simple_type> simple_type; };
+/// 0 / expr = 0 or Divison_by_Zero
+template<class expr>struct Divide<Integer<0>, expr>
+{
+    typedef typename Loki::Select<Loki::IsSameType<expr, Integer<0> >::value,
+            Divison_by_Zero,
+            Integer<0>>::Result simple_type;
+};
 
- /// 0 / expr = 0 or Divison_by_Zero
- template<class expr> struct Divide<Integer<0>, expr>
- {  typedef typename Loki::Select<  Loki::IsSameType<class expr::simple_type, Integer<0> >::value,
- Divison_by_Zero,
- Integer<0> >::Result simple_type;
- };
-
- /// expr * (1 / expr = 1
- /// @bug must trow error if expr evaluates to zero at runtime.
- template<class expr> struct Times<expr,Divide<Integer<1>, expr> > {    typedef Integer<1> simple_type; };
-
- /// (1 / expr ) * expr = 1
- /// @bug must trow error if expr evaluates to zero at runtime.
- template<class expr> struct Times<Divide<Integer<1>, expr>, expr> {    typedef Integer<1> simple_type; };
- */
 
 #endif
 

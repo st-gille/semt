@@ -161,6 +161,13 @@ SEMT_DEFINE_TRAIT(isArcosh, class T, Arcosh_t<T>)
 SEMT_DEFINE_TRAIT(isArtanh, class T, Artanh_t<T>)
 
 SEMT_DEFINE_TRAIT(isCond, class T COMMA class C COMMA class A, Defined_if<T COMMA C COMMA A>)
+SEMT_DEFINE_TRAIT(isSimpleCond, class arg COMMA class cond, Defined_if<arg COMMA cond COMMA arg>)
+
+template<class T>
+struct isComplexCond
+{
+    static const bool value = isCond<T>::value && !isSimpleCond<T>::value;
+};
 
 template<class T, class Enable = void>
 struct isUnOp : public false_type
