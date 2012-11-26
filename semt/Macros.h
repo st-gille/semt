@@ -61,7 +61,7 @@ template<T_ARGS> struct L_NAME {                                           \
     };                                                                     \
     static SEMT_INLINE_STATIC SEMT_PRECISION apply(CAR x)                  \
     {   return APPLY;   }                                                  \
-    SEMT_DEFINE_TOSTRING(std::setw(SEMT_STRLEN) << STR);                   \
+    SEMT_DEFINE_TOSTRING(STR);                                             \
 };
 
 /*!

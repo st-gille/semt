@@ -111,13 +111,12 @@ std::string matrix_str(const SEMT::VectorExpr& ex)
         throw std::runtime_error("invalid size in matrix_str.");
 
     std::ostringstream os;
-    os.precision(SEMT_STRPREC);
     for (size_t i = 0; i < rows; ++i)
     {
         os << "|\t";
         for (size_t j = 0; j < cols; ++j)
         {
-            os << std::setw(SEMT_STRLEN) << ex[i * cols + j]->toString() << ",\t";
+            os << ex[i * cols + j]->toString() << ",\t";
         }
         os << "|\n";
 
