@@ -45,7 +45,8 @@ ifneq (,$(findstring gprof,$(MAKECMDGOALS)))
 	CBFLAGS += -pg
 	ADDITIONAL_COMMANDS += ${BUILD_DIR}/${TARGET} $(ARGS)|| true;\
 		mkdir -p ./gprof;\
-		gprof ${BUILD_DIR}/${TARGET} > ./gprof/$(subst ${SPACE},_,${TARGET}_$(ARGS));
+		gprof ${BUILD_DIR}/${TARGET} > ./gprof/$(subst ${SPACE},_,${TARGET}_$(ARGS));\
+		rm ${BUILD_DIR}/*.o;
 endif
 
 ifneq (,$(findstring gcov,$(MAKECMDGOALS)))
@@ -54,7 +55,8 @@ ifneq (,$(findstring gcov,$(MAKECMDGOALS)))
 	ADDITIONAL_COMMANDS += ${BUILD_DIR}/${TARGET} $(ARGS);\
 		gcov -o ${BUILD_DIR} ${SRC_FILE} > /dev/null;\
 		mkdir -p ${GCOV_DIR};\
-		mv *.gcov ${GCOV_DIR};
+		mv *.gcov ${GCOV_DIR};\
+		rm ${BUILD_DIR}/*.o;
 endif
 
 #
