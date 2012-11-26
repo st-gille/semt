@@ -46,21 +46,21 @@ struct SingleSimplifier
 
 /// Dispatch to unary simplifier.
 template<template<class > class toSimplify, class Arg>
-struct SingleSimplifier<toSimplify<Arg>>
+struct SingleSimplifier<toSimplify<Arg> >
 {
     typedef typename UnarySimplifier<toSimplify, Arg>::Result Result;
 };
 
 /// Dispatch to binary simplifier.
 template<template<class, class > class toSimplify, class LHS, class RHS>
-struct SingleSimplifier<toSimplify<LHS, RHS>>
+struct SingleSimplifier<toSimplify<LHS, RHS> >
 {
     typedef typename BinarySimplifier<toSimplify, LHS, RHS>::Result Result;
 };
 
 /// Dispatch to IntPower simplifier.
 template<class base, int exp>
-struct SingleSimplifier<Power<base, exp>>
+struct SingleSimplifier<Power<base, exp> >
 {
     typedef typename IntPowerSimplifier<base, exp>::Result Result;
 };
@@ -89,7 +89,7 @@ struct RecursiveSimplifier<T, typename enable_if_c<isConstExpr<T>::value>::type>
 /// Dispatch to unary simplifier, simplify arguments first.
 template<template<class > class toSimplify, class Arg>
 struct RecursiveSimplifier<toSimplify<Arg>,
-        typename disable_if_c<isConstExpr<toSimplify<Arg>>::value>::type>
+        typename disable_if_c<isConstExpr<toSimplify<Arg> >::value>::type>
 { /* avoid reference to Literal's tparam */
     typedef typename RecursiveSimplifier<Arg>::Result sArg;
     typedef typename SingleSimplifier<typename UnarySimplifier<toSimplify, sArg>::Result>::Result Result;
@@ -118,7 +118,7 @@ struct RecursiveSimplifier<Defined_if<RHS, Cond, Cond_arg>, void>
 {
     typedef typename RecursiveSimplifier<RHS>::Result sRHS;
     typedef typename RecursiveSimplifier<Cond_arg>::Result sCond_arg;
-    typedef typename SingleSimplifier<Defined_if<sRHS, Cond, sCond_arg>>::Result Result;
+    typedef typename SingleSimplifier<Defined_if<sRHS, Cond, sCond_arg> >::Result Result;
 };
 
 /// @}
@@ -133,7 +133,7 @@ struct RecursiveSimplifier<Defined_if<RHS, Cond, Cond_arg>, void>
 template<template<class > class UnOp, class RHS, class Enable>
 struct UnarySimplifier
 {
-    typedef UnOp<RHS>Result;
+    typedef UnOp<RHS> Result;
 };
 
 // Specializations for inverse unary functions.
@@ -142,7 +142,7 @@ struct UnarySimplifier
 template<class RHS>
 struct UnarySimplifier<Exp_t, Ln_t<RHS>, void>
 {
-    typedef Defined_if<RHS, GreaterThanZero>Result;
+    typedef Defined_if<RHS, GreaterThanZero> Result;
 };
 
 /// Ln(Exp(f)) = f
@@ -164,7 +164,7 @@ struct UnarySimplifier<Ln_t, Exp_t<RHS>, void>
 template<template<class, class > class BinOp, class LHS, class RHS, class Enable>
 struct BinarySimplifier
 {
-    typedef BinOp<LHS, RHS>Result;
+    typedef BinOp<LHS, RHS> Result;
 };
 
 /// @}
@@ -196,7 +196,7 @@ template<class LHS>
 struct BinarySimplifier<Minus, LHS, LHS,
         typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
 {
-    typedef Integer<0>Result;
+    typedef Integer<0> Result;
 };
 
 /// f - 0 = f
@@ -220,7 +220,7 @@ template<class LHS>
 struct BinarySimplifier<Times, LHS, Integer<0>,
         typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
 {
-    typedef Integer<0>Result;
+    typedef Integer<0> Result;
 };
 
 /// 0 * f = 0
@@ -228,7 +228,7 @@ template<class LHS>
 struct BinarySimplifier<Times, Integer<0>, LHS,
         typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
 {
-    typedef Integer<0>Result;
+    typedef Integer<0> Result;
 };
 
 /// f * 1 = f
@@ -252,7 +252,7 @@ template<class LHS>
 struct BinarySimplifier<Divide, LHS, LHS,
         typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
 {
-    typedef Defined_if<Integer<1>, NotZero, LHS>Result;
+    typedef Defined_if<Integer<1>, NotZero, LHS> Result;
 };
 
 /// 0 / f = 0 restr. f != 0
@@ -260,18 +260,19 @@ template<class LHS>
 struct BinarySimplifier<Divide, Integer<0>, LHS,
         typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
 {
-    typedef Defined_if<Integer<0>, NotZero, LHS>Result;
+    typedef Defined_if<Integer<0>, NotZero, LHS> Result;
 };
 
+/*
 /// 1 / f = f^-1
 /// @todo Reconsider this.
 template<class LHS>
 struct BinarySimplifier<Divide, Integer<1>, LHS,
         typename disable_if_c<(isInt<LHS>::value || isCond<LHS>::value)>::type>
 {
-    typedef Power<LHS, -1>Result;
+    typedef Power<LHS, -1> Result;
 };
-
+*/
 /// @}
 
 /*!
@@ -283,7 +284,7 @@ struct BinarySimplifier<Divide, Integer<1>, LHS,
 template<class RHS, int i, int j>
 struct BinarySimplifier<Times, Power<RHS, i>, Power<RHS, j>, void>
 {
-    typedef Power<RHS, i + j>Result;
+    typedef Power<RHS, i + j> Result;
 };
 
 /*!
@@ -293,7 +294,7 @@ struct BinarySimplifier<Times, Power<RHS, i>, Power<RHS, j>, void>
 template<class RHS, int j>
 struct BinarySimplifier<Times, RHS, Power<RHS, j>, void>
 {
-    typedef Power<RHS, 1 + j>Result;
+    typedef Power<RHS, 1 + j> Result;
 };
 
 /*!
@@ -303,7 +304,7 @@ struct BinarySimplifier<Times, RHS, Power<RHS, j>, void>
 template<class LHS, int j>
 struct BinarySimplifier<Times, Power<LHS, j>, LHS, void>
 {
-    typedef Power<LHS, 1 + j>Result;
+    typedef Power<LHS, 1 + j> Result;
 };
 
 /*!
@@ -314,22 +315,22 @@ template<class LHS>
 struct BinarySimplifier<Times, LHS, LHS,
         typename enable_if_c<(!isInt<LHS>::value && !isPower<LHS>::value && !isCond<LHS>::value)>::type>
 {
-    typedef Power<LHS, 2>Result;
+    typedef Power<LHS, 2> Result;
 };
 
-/// Maps dynamic power to comile-time expanded version for integer exponents.
+/// Maps dynamic power to compile-time expanded version for integer exponents.
 template<class base, int exp>
 struct BinarySimplifier<EPower, base, Integer<exp>,
         typename enable_if_c<(!isInt<base>::value)>::type>
 {
-    typedef Power<base, exp>Result;
+    typedef Power<base, exp> Result;
 };
 
 /// ((f^g)^h) = f^(g*h)
 template<class base, class exp1, class exp2>
 struct BinarySimplifier<EPower, EPower<base, exp1>, exp2, void>
 {
-    typedef EPower<base, Times<exp1, exp2>>Result;
+    typedef EPower<base, Times<exp1, exp2> >Result;
 };
 
 /// @}
@@ -344,7 +345,7 @@ struct BinarySimplifier<EPower, EPower<base, exp1>, exp2, void>
 template<template<class, class > class Op, class LHS, class RHS, class cond, class cond_arg>
 struct BinarySimplifier<Op, Defined_if<LHS, cond, cond_arg>, Defined_if<RHS, cond, cond_arg>, void>
 {
-    typedef Defined_if<typename BinarySimplifier<Op, LHS, RHS>::Result, cond, cond_arg>Result;
+    typedef Defined_if<typename BinarySimplifier<Op, LHS, RHS>::Result, cond, cond_arg> Result;
 };
 
 /// Ln(f) restr f > 0 = Ln(f)
@@ -366,7 +367,7 @@ template<template<class, class > class Op, class LHS, class RHS, class cond, cla
 struct BinarySimplifier<Op, Defined_if<LHS, cond, cond_arg>, RHS,
         typename disable_if_c<isCond<RHS>::value>::type>
 {
-    typedef Defined_if<typename RecursiveSimplifier<Op<LHS, RHS>>::Result, cond, cond_arg>Result;
+    typedef Defined_if<typename RecursiveSimplifier<Op<LHS, RHS> >::Result, cond, cond_arg> Result;
 };
 
 /// f op {g restr} == {f op g restr}
@@ -374,7 +375,7 @@ template<template<class, class > class Op, class LHS, class RHS, class cond, cla
 struct BinarySimplifier<Op, LHS, Defined_if<RHS, cond, cond_arg>,
         typename disable_if_c<isCond<LHS>::value>::type>
 {
-    typedef Defined_if<typename RecursiveSimplifier<Op<LHS, RHS>>::Result, cond, cond_arg>Result;
+    typedef Defined_if<typename RecursiveSimplifier<Op<LHS, RHS> >::Result, cond, cond_arg> Result;
 };
 
 /*
@@ -434,47 +435,47 @@ struct BinarySimplifier<Op, LHS, Defined_if<RHS, cond, cond_arg>,
 template<int i, int j>
 struct BinarySimplifier<Plus, Integer<i>, Integer<j>, void>
 {
-    typedef Integer<i + j>Result;
+    typedef Integer<i + j> Result;
 };
 template<int i, int j>
 struct BinarySimplifier<Minus, Integer<i>, Integer<j>, void>
 {
-    typedef Integer<i - j>Result;
+    typedef Integer<i - j> Result;
 };
 template<int i, int j>
 struct BinarySimplifier<Times, Integer<i>, Integer<j>, void>
 {
-    typedef Integer<i * j>Result;
+    typedef Integer<i * j> Result;
 };
 template<int i, int j>
 struct BinarySimplifier<Divide, Integer<i>, Integer<j>,
         typename enable_if_c<((i != 0) && (j != 0) && (j != 1))>::type>
 {
-    typedef Rational<i, j>Result;
+    typedef Rational<i, j> Result;
 };
 template<int i>
 struct BinarySimplifier<Divide, Integer<i>, Integer<1>, void>
 {
-    typedef Integer<i>Result;
+    typedef Integer<i> Result;
 };
 template<int j>
 struct BinarySimplifier<Divide, Integer<0>, Integer<j>, typename enable_if_c<j != 0>::type>
 {
-    typedef Integer<0>Result;
+    typedef Integer<0> Result;
 };
 
 /// This is not a binary simplifier, because the 2nd template parameter is int.
 template<class base, int exp>
 struct IntPowerSimplifier
 {
-    typedef Power<base, exp>Result;
+    typedef Power<base, exp> Result;
 };
 
 /// 1^exp = 1
 template<int exp>
 struct IntPowerSimplifier<Integer<1>, exp>
 {
-    typedef Integer<1>Result;
+    typedef Integer<1> Result;
 };
 
 /// base^1 = base
@@ -488,35 +489,35 @@ struct IntPowerSimplifier<base, 1>
 template<class base>
 struct IntPowerSimplifier<base, 0>
 {
-    typedef Integer<1>Result;
+    typedef Integer<1> Result;
 };
 
 /// 1^1 = 1
 template<>
 struct IntPowerSimplifier<Integer<1>, 1>
 {
-    typedef Integer<1>Result;
+    typedef Integer<1> Result;
 };
 
 /// 1^0 = 1
 template<>
 struct IntPowerSimplifier<Integer<1>, 0>
 {
-    typedef Integer<1>Result;
+    typedef Integer<1> Result;
 };
 
 /// 0^exp = 0
 template<int exp>
 struct IntPowerSimplifier<Integer<0>, exp>
 {
-    typedef Integer<0>Result;
+    typedef Integer<0> Result;
 };
 
 /// 0^0 = 1
 template<>
 struct IntPowerSimplifier<Integer<0>, 0>
 {
-    typedef Integer<1>Result;
+    typedef Integer<1> Result;
 };
 
 /// @}
@@ -530,22 +531,22 @@ struct IntPowerSimplifier<Integer<0>, 0>
 template<int a, int b, int i, int j>
 struct BinarySimplifier<Plus, Rational<a, b>, Rational<i, j>, void>
 {
-    typedef Rational<(a * j) + (i * b), b * j>Result;
+    typedef Rational<(a * j) + (i * b), b * j> Result;
 };
 template<int a, int b, int i, int j>
 struct BinarySimplifier<Minus, Rational<a, b>, Rational<i, j>, void>
 {
-    typedef Rational<(a * j - i * b), b * j>Result;
+    typedef Rational<(a * j - i * b), b * j> Result;
 };
 template<int a, int b, int i, int j>
 struct BinarySimplifier<Times, Rational<a, b>, Rational<i, j>, void>
 {
-    typedef Rational<a * i, b * j>Result;
+    typedef Rational<a * i, b * j> Result;
 };
 template<int a, int b, int i, int j>
 struct BinarySimplifier<Divide, Rational<a, b>, Rational<i, j>, void>
 {
-    typedef Rational<a * j, b * i>Result;
+    typedef Rational<a * j, b * i> Result;
 };
 
 /// @}

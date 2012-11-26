@@ -41,14 +41,14 @@ struct IntIterator
     typedef typename nodes<i>::simple_type actual_type;
 
     /// The next iterator (like ++).
-    typedef typename Loki::Select<last, Loki::NullType, IntIterator<nodes, i + skip, end, skip>>::Result next;
+    typedef typename Loki::Select<last, Loki::NullType, IntIterator<nodes, i + skip, end, skip> >::Result next;
 };
 
 /*!
  * Iterator for Loki::Typelist.
  */
 template<class Head, class Tail>
-struct TLIterator<Loki::Typelist<Head, Tail>>
+struct TLIterator<Loki::Typelist<Head, Tail> >
 {
     /// Is this the last type in the list (like list.end() - 1)?
     static const bool last = Loki::IsSameType<Tail, Loki::NullType>::value;
@@ -58,10 +58,10 @@ struct TLIterator<Loki::Typelist<Head, Tail>>
     //typedef typename Loki::Select<isSemtType<Head>::value, Head, typename Head::simple_type>::Result actual_type;
 
     /// The next iterator (like ++).
-    typedef typename Loki::Select<last, Loki::NullType, TLIterator<Tail>>::Result next;
+    typedef typename Loki::Select<last, Loki::NullType, TLIterator<Tail> >::Result next;
 };
 
-template<>struct TLIterator<Loki::NullType>
+template<> struct TLIterator<Loki::NullType>
 {
 };
 
@@ -116,15 +116,11 @@ struct For_each
     // The recursion stops if it::next is Loki::NullType.
     typedef typename For_each<Op, typename it::next>::Result inner_loop;
 
-    typedef Op<typename it::actual_type>act_node;
+    typedef Op<typename it::actual_type> act_node;
 
     // If the iterator is consumed, return the final type,
     // otherwise we instantiate the tail.
     typedef Loki::Typelist<act_node, inner_loop> Result;
-    /*typedef typename Loki::Select<    it::last,
-     Loki::NullType,
-     Loki::Typelist<act_node, inner_loop>
-     >::Result Result;*/
 };
 
 /// Partial specialization to stop recursive instantiation.
@@ -173,10 +169,10 @@ fold_tl_l(const types& ts)
  * @todo example
  */
 template<template<class > class Op, class types>
-typename For_each<Op, TLIterator<types>>::Result
+typename For_each<Op, TLIterator<types> >::Result
 for_each(const types& ts)
 {
-    return typename For_each<Op, TLIterator<types>>::Result();
+    return typename For_each<Op, TLIterator<types> >::Result();
 }
 
 /// @} // group loops

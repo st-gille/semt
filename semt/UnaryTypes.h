@@ -16,11 +16,11 @@ template<typename expr>
 struct Sgn_t
 {
     typedef SEMT_SIMPLE_TYPE(expr) First;
-    typedef Sgn_t<First>simple_type;
+    typedef Sgn_t<First> simple_type;
 
     static const int FirstVar = First::FirstVar;
 
-    template<typename var>struct partial
+    template<typename var> struct partial
     {
         static const bool dependent = First::template partial<var>::dependent;
         // This is zero, but only if First is not zero or this var isn't part of this expression.

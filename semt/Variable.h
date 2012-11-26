@@ -13,13 +13,13 @@ namespace SEMT
  * @tparam  index   The index of this variable, counting from zero.
  * @ingroup nodes
  */
-template<int index>struct Variable
+template<int index> struct Variable
 {
-    typedef Variable<index>simple_type;
+    typedef Variable<index> simple_type;
 
     static const int LastVar = index;
 
-    template<typename var>struct partial
+    template<typename var> struct partial
     {
         static const bool dependent = (Loki::IsSameType<simple_type, var>::value) ? true : false;
         typedef typename Loki::Select<Loki::IsSameType<simple_type, var>::value,

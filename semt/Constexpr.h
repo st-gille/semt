@@ -15,7 +15,7 @@ namespace SEMT
  * Compile-time constant integer value.
  * Used extensively across this library, so use it anywhere you can.
  */
-SEMT_DEFINE_CONSTEXPR(Integer, int n, n, n*1.0, n*1.0);
+SEMT_DEFINE_CONSTEXPR(Integer, int n, n, n*1.0, n);
 
 /// Not very interesting rational type, may be useful for rational exponents.
 SEMT_DEFINE_CONSTEXPR(Rational,

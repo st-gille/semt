@@ -26,7 +26,7 @@ struct Expr
     static const int LastVar = First::LastVar;
 
     /// This is the heart, \c var is Variable\<i\> for an integer i, we just forward here.
-    template<typename var>struct partial
+    template<typename var> struct partial
     {
         /// Indicates if var has any influence in this expression.
         static const bool dependent = First::template partial<var>::dependent;
@@ -41,7 +41,7 @@ struct Expr
 
     /// Used by operator<<.
     SEMT_DEFINE_TOSTRING(First::toString())
-    };
+};
 
 /*!
  * @addtogroup api
@@ -56,9 +56,9 @@ struct Expr
  * @return  The value of the partial derivative of expr with respect to Variable<V> at x.
  */
 template<typename expr, int V>
-SEMT_PRECISION diff_at(Expr<expr>, Expr<Variable<V>>, CAR x)
+SEMT_PRECISION diff_at(Expr<expr>, Expr<Variable<V> >, CAR x)
 {
-    return Expr<typename expr::template partial<Variable<V>>::deriv>::apply(x);
+    return Expr<typename expr::template partial<Variable<V> >::deriv>::apply(x);
 }
 
 /*!
@@ -72,10 +72,10 @@ SEMT_PRECISION diff_at(Expr<expr>, Expr<Variable<V>>, CAR x)
  *      @until }
  */
 template<typename expr, int V>
-Expr<typename expr::template partial<Variable<V>>::deriv>
-deriv_t(Expr<expr>, Expr<Variable<V>> = Expr<Variable<V>>())
+Expr<typename expr::template partial<Variable<V> >::deriv>
+deriv_t(Expr<expr>, Expr<Variable<V> > = Expr<Variable<V> >())
 {
-    return Expr<typename expr::template partial<Variable<V>>::deriv>();
+    return Expr<typename expr::template partial<Variable<V> >::deriv>();
 }
 
 /// @} // group api

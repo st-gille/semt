@@ -54,23 +54,22 @@ namespace intern
  * @param   base    Is used at run-time.
  * @return  base ^ expo
  */
-template<size_t expo>SEMT_INLINE SEMT_PRECISION PowerHelper(SEMT_PRECISION base)
+template<size_t expo> SEMT_INLINE SEMT_PRECISION PowerHelper(SEMT_PRECISION base)
 {
     // if the last bit is set, we need to multiply the result with this base,
     // otherwise we just return the next helper applied with the squared base
     return ((expo & 1) ? (base * PowerHelper<(expo >> 1)>(base * base))
-                         :
-                         (PowerHelper<(expo >> 1)>(base * base)));
+                       : (PowerHelper<(expo >> 1)>(base * base)));
 }
 
 /// Specialization for base ^ 1, the recursive instantiation stops.
-template<>SEMT_INLINE SEMT_PRECISION PowerHelper<1>(SEMT_PRECISION base)
+template<> SEMT_INLINE SEMT_PRECISION PowerHelper<1>(SEMT_PRECISION base)
 {
     return base;
 }
 
 /// Specialization for base ^ 0, needed if simplifications are disabled.
-template<>SEMT_INLINE SEMT_PRECISION PowerHelper<0>(SEMT_PRECISION base)
+template<> SEMT_INLINE SEMT_PRECISION PowerHelper<0>(SEMT_PRECISION base)
 {
     return 1.0;
 }
@@ -88,7 +87,7 @@ struct Power
 
     static const int LastVar = First::LastVar;
 
-    template<typename var>struct partial
+    template<typename var> struct partial
     {
         static const bool dependent = First::template partial<var>::dependent;
         typedef SEMT_SIMPLE_TYPE2(First::template partial<var>::deriv) First_d;

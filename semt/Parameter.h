@@ -19,14 +19,14 @@ template<int index, char name>
 class Parameter
 {
 public:
-    typedef Parameter<index>simple_type;
+    typedef Parameter<index> simple_type;
 
     static const int LastVar = 0;
 
-    template<typename var>struct partial
+    template<typename var> struct partial
     {
         static const bool dependent = false;
-        typedef Integer<0>deriv;
+        typedef Integer<0> deriv;
     };
 
     /// Assign a new value to this parameter only.
@@ -62,7 +62,7 @@ SEMT_PRECISION Parameter<index, name>::value = 0.0;
  *              if we're in the first instantiation).
  * @ingroup api
  */
-template<int count, char name>struct set_parameters
+template<int count, char name> struct set_parameters
 {
     /*!
      * Assign <tt>t[i]</tt> to <tt>Parameter<i, name></tt> for <tt>0 <= i < count</tt>.
@@ -76,7 +76,7 @@ template<int count, char name>struct set_parameters
 };
 
 /// Stop recursive update of parameters.
-template<char name>struct set_parameters<1, name>
+template<char name> struct set_parameters<1, name>
 {
     static void to(CAR t)
     {

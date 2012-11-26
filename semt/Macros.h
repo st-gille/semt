@@ -195,7 +195,7 @@ Expr<typename Fold_t<Op, IntIterator<nodes, directions>, right >::Result >      
         template<class T>                               \
         struct name : public false_type {};             \
         template<t_param>                               \
-        struct name<type > : public true_type {};
+        struct name<type> : public true_type {};
 
 /*!
  * Avoid cutting of macro parameters.

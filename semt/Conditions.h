@@ -57,11 +57,11 @@ struct Defined_if
 {
     typedef SEMT_SIMPLE_TYPE(expr) First;
     typedef SEMT_SIMPLE_TYPE(cond_arg_) cond_arg;
-    typedef Defined_if<First, Condition, cond_arg>simple_type;
+    typedef Defined_if<First, Condition, cond_arg> simple_type;
 
     static const int LastVar = First::LastVar;
 
-    template<class var>struct partial
+    template<class var> struct partial
     {
         // We may change, if cond_arg changes.
         static const bool dependent = (First::template partial<var>::dependent
@@ -70,8 +70,8 @@ struct Defined_if
 
         // If our expression does not depend on this variable, differentiate straight to zero,
         // otherwise just differentiate and preserve checking.
-        typedef Defined_if<First_d, Condition, cond_arg>First_d_checked;
-        typedef typename Loki::Select<dependent, First_d_checked, Integer<0>>::Result deriv;
+        typedef Defined_if<First_d, Condition, cond_arg> First_d_checked;
+        typedef typename Loki::Select<dependent, First_d_checked, Integer<0> >::Result deriv;
     };
 
     static SEMT_INLINE_STATIC SEMT_PRECISION apply(CAR x)

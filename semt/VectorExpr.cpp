@@ -10,7 +10,7 @@ namespace intern
  */
 
 /// No-fail if the first count pointers in data are valid.
-template<class T>void free_data(const std::vector<T*>& data, size_t count)
+template<class T> void free_data(const std::vector<T*>& data, size_t count)
 {
     while (count != 0)
     {
@@ -21,7 +21,7 @@ template<class T>void free_data(const std::vector<T*>& data, size_t count)
 }
 
 /// Exception-neutral swap.
-template<class T>void swap(T& t1, T& t2)
+template<class T> void swap(T& t1, T& t2)
 {
     const T tmp(t1);
     t1 = t2;
