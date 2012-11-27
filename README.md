@@ -37,6 +37,7 @@ to your console.
 Usage
 ---------
 Run `make doc` to create the documentation with doxygen.
+You can also download the documentation [here](https://github.com/downloads/st-gille/semt/semt-0-3-doc.tar.gz).
 There you will find an introductory example and the comprehensive API documentation.
 
 There are several example programs:
