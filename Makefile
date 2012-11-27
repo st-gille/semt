@@ -1,6 +1,3 @@
-#
-# Makefile of Diplomarbeit
-#
 .ONESHELL:
 SHELL=/bin/bash
 
@@ -19,15 +16,14 @@ VPATH := ${DIRS}
 # compiler settings
 #
 CC := g++
-CFLAGS := -Wall -std=c++0x -g3 \
-		-fmessage-length=0 -ftemplate-depth-200
+CFLAGS := -Wall -std=c++0x -g3 -fmessage-length=0 -ftemplate-depth-200
 #-DSEMT_DISABLE_PRINT #-DSEMT_DISABLE_ALL_SIMPLIFICATIONS
 CBFLAGS := -O0
 INCLUDES := -I ./
 LIBS :=
 
 #
-# predicate targets
+# predicates
 #
 ADDITIONAL_COMMANDS = @set -e;
 
