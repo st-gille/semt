@@ -6,8 +6,7 @@ and obtain their derivatives via C++ expression templates.
 
 This is an extension of Zvi Guttermans original work
 accompanying his master thesis
-"Symbolic Pre-computation for Numerical Applications",
-see http://www.cs.technion.ac.il/~ssdl/thesis/finished/2004/ZviGutterman/.
+["Symbolic Pre-computation for Numerical Applications"](http://www.cs.technion.ac.il/~ssdl/thesis/finished/2004/ZviGutterman/).
 
 Additional features include:
 * partial differentiation
