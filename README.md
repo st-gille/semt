@@ -53,7 +53,7 @@ to compile a corresponding binary.
 
 Using *release* mode enables compiler optimizations and places the binary in the `Release` folder.
 
-Using *gprof* creates a call graph and it's timings in `gprof/<binary>_<arguments>`, where you can supply arguments via the `${ARGS}` make variable.
+Using *gprof* creates a call graph and with timings in `gprof/<binary>_<arguments>`, where you can supply arguments via the `${ARGS}` make variable.
 
 Using *gcov* outputs coverage results into `gcov`.
 
