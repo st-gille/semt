@@ -36,7 +36,7 @@ to your console.
 Usage
 ---------
 Run `make doc` to create the documentation with doxygen.
-You can also download the documentation [here](https://github.com/downloads/st-gille/semt/semt-0-3-doc.tar.gz).
+You can view the documentation [here](http://www.numasoft.de/semt-doc/) or download it [here](https://github.com/downloads/st-gille/semt/semt-0-3-doc.tar.gz).
 There you will find an introductory example and the comprehensive API documentation.
 
 There are several example programs:
@@ -56,4 +56,4 @@ Using *gprof* creates a call graph and with timings in `gprof/<binary>_<argument
 
 Using *gcov* outputs coverage results into `gcov`.
 
-Contact me at *st_gille@web.de* for any questions.
+Contact me at *gille@numasoft.de* for any questions.
