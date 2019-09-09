@@ -152,6 +152,13 @@ struct UnarySimplifier<Ln_t, Exp_t<RHS>, void>
     typedef RHS Result;
 };
 
+/// Sqrt(pow(f,2)) = abs(f)
+template<class RHS>
+struct UnarySimplifier<Sqrt_t, Power<RHS, 2>, void>
+{
+    typedef Abs_t<RHS> Result;
+};
+
 /// @}
 
 /*!
@@ -333,6 +340,15 @@ struct BinarySimplifier<Times, LHS, LHS,
         typename enable_if_c<(!isInt<LHS>::value && !isPower<LHS>::value && !isCond<LHS>::value)>::type>
 {
     typedef Power<LHS, 2> Result;
+};
+
+/*!
+ * sqrt(f)^2 = |f|
+ */
+template<class RHS>
+struct BinarySimplifier<EPower, Sqrt_t<RHS>, Integer<2>, void>
+{
+    typedef Abs_t<RHS> Result;
 };
 
 /// Maps dynamic power to compile-time expanded version for integer exponents.
