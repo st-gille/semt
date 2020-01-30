@@ -54,7 +54,7 @@ namespace intern
  * @param   base    Is used at run-time.
  * @return  base ^ expo
  */
-template<size_t expo> SEMT_INLINE SEMT_PRECISION PowerHelper(SEMT_PRECISION base)
+template<int expo> SEMT_INLINE SEMT_PRECISION PowerHelper(SEMT_PRECISION base)
 {
     // if the last bit is set, we need to multiply the result with this base,
     // otherwise we just return the next helper applied with the squared base
