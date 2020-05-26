@@ -23,9 +23,9 @@ template<typename expr>
 struct ConcreteFunctionObject : public AbstractFunctionObject
 {
     /// Virtual cloning.
-    virtual SEMT_INLINE_VIRTUAL std::auto_ptr<AbstractFunctionObject> duplicate() const
+    virtual SEMT_INLINE_VIRTUAL std::unique_ptr<AbstractFunctionObject> duplicate() const
     {
-        return std::auto_ptr<AbstractFunctionObject>(new ConcreteFunctionObject<expr>);
+        return std::unique_ptr<AbstractFunctionObject>(new ConcreteFunctionObject<expr>);
     }
 
     /// Evaluation is forwarded to expr's Expr::apply(Array).

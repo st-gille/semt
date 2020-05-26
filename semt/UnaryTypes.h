@@ -62,6 +62,12 @@ SEMT_DEFINE_UNARY_TYPE(Ln_t,
         Divide<First_d COMMA First >,
         "ln(" << First::toString() << ")");
 
+/// Square root.
+SEMT_DEFINE_UNARY_TYPE(Sqrt_t,
+        sqrt(First::apply(x)),
+        Divide<Integer<1> COMMA Times<Integer<2> COMMA Sqrt_t<First>> >,
+        "sqrt(" << First::toString() << ")");
+
 /// Sine.
 SEMT_DEFINE_UNARY_TYPE(Sin_t,
         sin(First::apply(x)),

@@ -103,7 +103,7 @@ struct TNAME                                                                    
  */
 #define SEMT_DEFINE_UNARYOP(op_t, op_n)                         \
 template<typename RHS>                                          \
-SEMT_INLINE SEMT::Expr<SEMT::op_t<RHS > >                       \
+SEMT_INLINE SEMT::Expr<SEMT::op_t<RHS > > constexpr             \
 op_n(const SEMT::Expr<RHS>)                                     \
 {                                                               \
     return SEMT::Expr<SEMT::op_t<RHS > >();                     \
@@ -151,7 +151,7 @@ struct TNAME                                                                    
  */
 #define SEMT_DEFINE_BINARYOP(op_t, op_n)                        \
 template<typename LHS, typename RHS>                            \
-SEMT_INLINE SEMT::Expr<SEMT::op_t<LHS, RHS > >                  \
+SEMT_INLINE SEMT::Expr<SEMT::op_t<LHS, RHS > > constexpr        \
         op_n(SEMT::Expr<LHS>, SEMT::Expr<RHS>)                  \
 {                                                               \
     return SEMT::Expr<SEMT::op_t<LHS, RHS > >();                \

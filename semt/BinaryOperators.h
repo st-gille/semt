@@ -16,7 +16,7 @@ SEMT_DEFINE_BINARYOP(EPower, pow);
 
 ///@bug This one is actually not intended, but it's necessary for deriv_t() to work with Power.
 template<typename LHS, int exp>
-inline SEMT::Expr<SEMT::Power<LHS, exp> >
+inline constexpr SEMT::Expr<SEMT::Power<LHS, exp> >
 pow(SEMT::Expr<LHS>, SEMT::Expr<SEMT::Integer<exp> >)
 {
     return SEMT::Expr<SEMT::Power<LHS, exp> >();
