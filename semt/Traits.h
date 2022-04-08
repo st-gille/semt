@@ -145,6 +145,7 @@ struct isBinOp<T, typename enable_if_c<(
 
 SEMT_DEFINE_TRAIT(isExp, class T, Exp_t<T>)
 SEMT_DEFINE_TRAIT(isLn, class T, Ln_t<T>)
+SEMT_DEFINE_TRAIT(isSqrt, class T, Sqrt_t<T>)
 
 SEMT_DEFINE_TRAIT(isSin, class T, Sin_t<T>)
 SEMT_DEFINE_TRAIT(isCos, class T, Cos_t<T>)
@@ -177,6 +178,7 @@ template<class T>
 struct isUnOp<T, typename enable_if_c<(
         isExp<T>::value
                 || isLn<T>::value
+                || isSqrt<T>::value
                 || isSin<T>::value
                 || isCos<T>::value
                 || isTan<T>::value

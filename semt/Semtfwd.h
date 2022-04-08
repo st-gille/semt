@@ -228,7 +228,7 @@
         {
         }
         virtual SEMT_PRECISION operator()(CAR x) const = 0;
-        virtual std::auto_ptr<AbstractFunctionObject> duplicate() const = 0;
+        virtual std::unique_ptr<AbstractFunctionObject> duplicate() const = 0;
 
         #if not SEMT_DISABLE_PRINT
         virtual std::string toString() const = 0;

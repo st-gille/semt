@@ -72,6 +72,7 @@ template<typename ARG> struct Sgn_t;
 template<typename ARG> struct Abs_t;
 template<typename ARG> struct Exp_t;
 template<typename ARG> struct Ln_t;
+template<typename ARG> struct Sqrt_t;
 template<typename ARG> struct Sin_t;
 template<typename ARG> struct Arcsin_t;
 template<typename ARG> struct Cos_t;
